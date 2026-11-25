@@ -1,5 +1,6 @@
-import '../../domain/product.dart';
+
 import 'package:material_ui/material_ui.dart';
+import '../../domain/product.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
@@ -18,28 +19,44 @@ class ProductCard extends StatelessWidget {
       child: Card(
         color: const Color(0xFF1E1E1E),
         elevation: 2,
+        margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(16),
         ),
+        clipBehavior: Clip.antiAlias,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                height: 120,
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF2A2A2A),
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                child: const Icon(
-                  Icons.shopping_bag_outlined,
-                  size: 50,
-                  color: Color(0xFF8B80F9),
+              // Product Image
+              ClipRRect(
+                borderRadius: BorderRadius.circular(12),
+                child: Image.asset(
+                  product.image,
+                  height: 120,
+                  width: double.infinity,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) {
+                    debugPrint('IMAGE ERROR: $error');
+
+                    return Container(
+                      height: 120,
+                      width: double.infinity,
+                      color: Colors.red,
+                      alignment: Alignment.center,
+                      child: const Text(
+                        'IMAGE NOT FOUND',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    );
+                  },
                 ),
               ),
+
               const SizedBox(height: 12),
+
+              // Product Name
               Text(
                 product.name,
                 maxLines: 1,
@@ -50,15 +67,23 @@ class ProductCard extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
+
               const SizedBox(height: 6),
+
+              // Product Category
               Text(
                 product.category,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   fontSize: 12,
                   color: Colors.grey,
                 ),
               ),
+
               const SizedBox(height: 8),
+
+              // Product Price and Arrow
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
