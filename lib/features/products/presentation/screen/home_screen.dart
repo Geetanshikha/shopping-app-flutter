@@ -1,7 +1,7 @@
-
 import 'package:material_ui/material_ui.dart';
 import '../../data/products.dart';
 import '../widgets/product_card.dart';
+import 'product_details_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -29,7 +29,6 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -74,29 +73,35 @@ class HomeScreen extends StatelessWidget {
 
             // Product grid
             Expanded(
-              child: GridView.builder(
-                itemCount: products.length,
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 12,
-                  mainAxisSpacing: 12,
-                  childAspectRatio: 0.68,
-                ),
-                itemBuilder: (context, index) {
-                  final product = products[index];
+              child: ScrollConfiguration(
+                behavior:
+                    const MaterialScrollBehavior().copyWith(overscroll: false),
+                child: GridView.builder(
+                  itemCount: products.length,
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    crossAxisSpacing: 12,
+                    mainAxisSpacing: 12,
+                    childAspectRatio: 0.68,
+                  ),
+                  itemBuilder: (context, index) {
+                    final product = products[index];
 
-                  return ProductCard(
-                    product: product,
-                    onTap: () {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('${product.name} selected'),
-                        ),
-                      );
-                    },
-                  );
-                },
+                    return ProductCard(
+                      product: product,
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ProductDetailsScreen(
+                              product: product,
+                            ),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                ),
               ),
             ),
           ],
